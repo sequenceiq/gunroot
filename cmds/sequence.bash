@@ -3,6 +3,7 @@ init() {
 	cmd-export-ns seq "SequenceIQ namespace"
 	cmd-export seq-update
     cmd-export seq-alias
+    seq_find_profile
 }
 
 
@@ -24,6 +25,10 @@ seq_update_binary() {
     curl -Lk $latest | tar -zxC /usr/local/bin
 }
 
+seq_find_profile() {
+  [ -f ~/.profile ] && _PROFILE=~/.profile || _PROFILE=~/.bash_profile
+}
+
 seq-update() {
   declare desc="Updates the SequenceIQ glidergun modules and the binary from CircleCI"
   
@@ -31,13 +36,31 @@ seq-update() {
   seq_update_binary
 }
 
-seq-alias() {
-  declare desc="Prints usefull aliases"
+seq_delete_aliases() {
+  sed -i.bak '/gun_aliases()/,/^}/ d' ${_PROFILE}
+}
 
-  cat<<EOF
-alias gun='GUN_ROOT=~/.gunroot /usr/local/bin/gun' 
-alias sgun='gun seq'
-alias jump='gun jump run'
-alias =''
+seq_save_aliases() {
+  cat >> ${_PROFILE} <<EOF
+gun_aliases(){
+  alias gun='GUN_ROOT=~/.gunroot /usr/local/bin/gun' 
+  alias sgun='gun seq'
+  alias jump='gun jump run'
+  alias ghp='gun gh peco'
+}
 EOF
+
+}
+
+seq-alias() {
+  declare desc="Saves usefull aliases into .profile/.bash_profile"
+
+  seq_delete_aliases
+  seq_save_aliases
+
+  echo "#####################" | yellow
+  echo "reload your profile:" | yellow
+  echo " " | yellow
+  echo " source ${_PROFILE}" | green
+  echo "#####################" | yellow
 }
