@@ -47,7 +47,7 @@ gun_aliases(){
   alias sgun='gun seq'
   alias jump='gun jump run'
   alias ghp='gun gh peco'
-}
+}; gun_aliases
 EOF
 
 }
