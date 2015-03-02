@@ -24,7 +24,7 @@ seq_update_binary() {
 }
 
 seq-update() {
-  declare desc="Updates the SequenceIQ glidergun modules"
+  declare desc="Updates the SequenceIQ glidergun modules and the binary from CircleCI"
   
   seq_update_modules
   seq_update_binary
