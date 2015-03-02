@@ -11,8 +11,8 @@ seq_update_modules() {
       debug updating $GUN_ROOT from $remote
       cd $GUN_ROOT
       git stash
-      git pull --rebase origin master
-      cd -
+      git pull --rebase origin master &> /dev/null
+      cd - &> /dev/null
   fi
 }
 
