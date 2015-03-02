@@ -2,6 +2,7 @@ init() {
     
 	cmd-export-ns seq "SequenceIQ namespace"
 	cmd-export seq-update
+    cmd-export seq-alias
 }
 
 
@@ -28,4 +29,15 @@ seq-update() {
   
   seq_update_modules
   seq_update_binary
+}
+
+seq-alias() {
+  declare desc="Prints usefull aliases"
+
+  cat<<EOF
+alias gun='GUN_ROOT=~/.gunroot /usr/local/bin/gun' 
+alias sgun='gun seq'
+alias jump='gun jump run'
+alias =''
+EOF
 }
