@@ -38,13 +38,10 @@ gh-peco() {
   declare desc="Interactivly selects a github repo from hist, and opens in a browser"
   declare query="$*"
   
-  set -x
-  
   github_history \
     | sed -n "s@https://github.com/\([^\/]*\)/\([^\/]*\)/.*@\1/\2@p" \
     | sort -u \
     | peco --query "$query " \
     | xargs -L 1 -I@ open https://github.com/@
-  set +x
 }
 
