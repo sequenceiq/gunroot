@@ -19,7 +19,7 @@ gist-list() {
   declare desc="Lists private gists"
 
   env-import GITHUB_TOKEN
-  user=$(gist-curl user |jq .name -r)
+  user=$(gist-curl user |jq .login -r)
 
   echo "github user: $user" | green
   gist-curl "users/$user/gists?per_page=100" | jq ".[]|[.url, (.files|keys)[]]" -c
