@@ -21,11 +21,20 @@ cci-latest() {
 
     local account=$(circle me|jq .name -r)
     debug account: $account
-    
-    local latest=$(circle "project/$account/$project/tree/master?filter=completed&limit=1" |jq .[0].build_num)
+
+    cci-latest-org $account $project
+}
+
+cci-latest-org() {
+    declare desc="Get latest build number from CircleCI"
+    declare project=$2 user=$1
+    : ${project:?}
+    : ${user:?}
+
+    local latest=$(circle "project/$user/$project/tree/master?filter=completed&limit=1" |jq .[0].build_num)
     debug latest build: $latest
 
-    circle  "project/$account/$project/$latest/artifacts" | jq .[].url -r | grep -i $(uname)
+    circle  "project/$user/$project/$latest/artifacts" | jq .[].url -r | grep -i $(uname)
 }
 
 circle() {
