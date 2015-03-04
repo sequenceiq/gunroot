@@ -19,7 +19,7 @@ seq_update_modules() {
 }
 
 seq_update_binary() {
-    local latest=$(cci-latest glidergun)
+    local latest=$(cci-latest-org sequenceiq glidergun)
 
     debug latest binary: $latest
     curl -Lk $latest | tar -zxC /usr/local/bin
