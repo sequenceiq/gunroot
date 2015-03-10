@@ -16,6 +16,7 @@ swarm-generate-file() {
 
   : ${prefix:?}
   
+  debug $desc
   local machines=$(docker-machine ls -q | grep $prefix)
   debug machines=$machines
 
@@ -42,5 +43,16 @@ swarm-manager() {
 
   : ${prefix:?}
 
-  $(deps-dir)/bin/swarm help
+  if [ ! -e $SWARM_DIR/${prefix}.swarm ] ;then
+    swarm-generate-file $prefix
+  fi
+
+  local certOpts=$(swarm-get-cert-opts $prefix)
+  
+  $GUN_ROOT/.gun/bin/swarm manage \
+    -H tcp://0.0.0.0:3376 \
+    --tlsverify \
+    $certOpts \
+    file://$SWARM_DIR/${prefix}.swarm
+
 }
