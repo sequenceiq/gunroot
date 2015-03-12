@@ -52,10 +52,8 @@ circle() {
     local url="https://circleci.com/api/v1/$path"
     debug CURL: $url
     
-    local auth="circle-token=$CIRCLE_TOKEN"
-    [[ $url =~ "?" ]] && url="$url&$auth" || url="$url?$auth"
-
-    curl -s \
+    curl -s -G \
+        -d circle-token=$CIRCLE_TOKEN \
         -H "Accept: application/json" \
         "$url" "$@"
 }
