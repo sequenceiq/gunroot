@@ -1,7 +1,9 @@
 init() {
     deps-require jq 1.4
+    deps-require peco
     cmd-export-ns gist "Github gist namespace"
     cmd-export gist-list
+    cmd-export gist-search
 }
 
 gist-curl() {
@@ -13,6 +15,12 @@ gist-curl() {
   [[ $path =~ \? ]] && sep="&"
 
   curl -s "https://api.github.com/${path}${sep}access_token=$GITHUB_TOKEN" "$@"
+}
+
+gist-search() {
+    declare desc="Search in gists by file name matching with peco"
+
+    gist-list | peco "$@"
 }
 
 gist-list() {
