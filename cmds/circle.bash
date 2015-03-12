@@ -19,9 +19,16 @@ cci-latest() {
     declare project=$1
     : ${project:?}
 
-    local account=$(circle me|jq .name -r)
-    debug account: $account
+    local account=""
 
+    if [[ $project =~ / ]]; then
+        account=${project%/*}
+        project=${project#*/}
+    else
+      account=$(circle me|jq .name -r)
+      debug account: $account
+    fi
+    
     cci-latest-org $account $project
 }
 
