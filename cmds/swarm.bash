@@ -47,6 +47,8 @@ swarm-manager() {
     swarm-generate-file $prefix
   fi
 
+  swarm-generate-docker-fn
+
   local certOpts=$(swarm-get-cert-opts $prefix)
   
   $GUN_ROOT/.gun/bin/swarm manage \
@@ -54,5 +56,30 @@ swarm-manager() {
     --tlsverify \
     $certOpts \
     file://$SWARM_DIR/${prefix}.swarm
+
+}
+
+swarm-generate-docker-fn() {
+  declare desc="Generates docker fn which talks to local swarm manager"
+  declare prefix=$1
+
+  local cacert=$(machine inspect boot-1| jq .CaCertPath -r)
+  local certdir=${cacert%/*}
+  debug certdir=$certdir
+  
+  echo === docker fn to talk to SWARM === | yellow
+(cat <<EOF
+docker() { 
+  DOCKER_TLS_VERIFY='' \\
+  DOCKER_CERT_PATH=$certdir \\
+  /usr/local/bin/docker \\
+    --tls \\
+    -H tcp://127.0.0.1:3376 \\
+    "\$@"
+}
+EOF
+) | green
+
+  echo ================================= | yellow
 
 }
