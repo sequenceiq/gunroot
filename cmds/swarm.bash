@@ -50,8 +50,8 @@ swarm-manager() {
   swarm-generate-docker-fn
 
   local certOpts=$(swarm-get-cert-opts $prefix)
-  
   $GUN_ROOT/.gun/bin/swarm manage \
+    --strategy random \
     -H tcp://0.0.0.0:3376 \
     --tlsverify \
     $certOpts \
