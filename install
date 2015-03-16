@@ -5,7 +5,7 @@ curl -Ls j.mp/seq-gun | bash
 USAGE
 
 boot() {
-  curl https://circle-artifacts.com/gh/lalyos/glidergun/39/artifacts/0/tmp/circle-artifacts.f3x4Wwa/gun-darwin.tgz | tar -zxC /usr/local/bin
+  curl https://circle-artifacts.com/gh/sequenceiq/glidergun/9/artifacts/0/tmp/circle-artifacts.BEZ8Qc9/gun-darwin.tgz | tar -zxC /usr/local/bin
   git clone git@github.com:sequenceiq/gunroot.git ~/.gunroot
   GUN_ROOT=~/.gunroot /usr/local/bin/gun seq alias
 }
