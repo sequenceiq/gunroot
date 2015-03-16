@@ -13,5 +13,6 @@ jump-run() {
     curl -sLko $tmpfile "http://j.mp/$url"
 
     module-load $tmpfile
+    jump-start
 }
 
