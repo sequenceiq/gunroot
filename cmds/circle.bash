@@ -16,7 +16,7 @@ debug() {
 
 cci-latest() {
     declare desc="Get latest build number from CircleCI"
-    declare project=$1
+    declare project=$1 branch=${2:-master}
     : ${project:?}
 
     local account=""
@@ -29,16 +29,20 @@ cci-latest() {
       debug account: $account
     fi
     
-    cci-latest-org $account $project
+    cci-latest-org $account $project $branch
 }
 
 cci-latest-org() {
     declare desc="Get latest build number from CircleCI"
-    declare project=$2 user=$1
+    declare user=$1 project=$2 branch=${3:-master}
     : ${project:?}
     : ${user:?}
 
-    local latest=$(circle "project/$user/$project/tree/master?filter=completed&limit=1" |jq .[0].build_num)
+    local latest=$(circle "project/$user/$project/tree/$branch?filter=completed&limit=1" |jq .[0].build_num)
+    if ! [ "$latest" -gt 0 ] 2>/dev/null ; then 
+        error "No artifact found for branch: '$branch' at https://circleci.com/gh/sequenceiq/cloudbreak-deployer"
+        exit 1
+    fi
     debug latest build: $latest
 
     circle  "project/$user/$project/$latest/artifacts" | jq .[].url -r | grep -i $(uname)
